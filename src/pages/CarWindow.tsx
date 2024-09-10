@@ -1,7 +1,7 @@
 export function CarWindow() {
     return (
         <>
-            <h1>Car Window</h1>
+            <h1>車窓みたいなやつ</h1>
             <div
                 style={{
                     height: "100vh",
