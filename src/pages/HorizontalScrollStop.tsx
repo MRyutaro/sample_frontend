@@ -143,9 +143,9 @@ export function HorizontalScrollStop() {
 
     // sticky
     const updateStickyTop = useCallback(() => {
-        console.log(`innerHeight: ${window.innerHeight}`);
+        // console.log(`innerHeight: ${window.innerHeight}`);
         const tmpStickyTop = (window.innerHeight - 400) / 2;
-        console.log(tmpStickyTop);
+        // console.log(tmpStickyTop);
         setStickyTop(tmpStickyTop);
     }, [setStickyTop]);
 
