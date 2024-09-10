@@ -48,6 +48,7 @@ const cards = [
 // containerRef: カードを含むコンテナのref. 親要素の幅を取得するために使用
 // transformXPercent: どれだけ移動させるかを0~100%で指定
 export function Cards({ containerRef, transformXPercent }: { containerRef: React.RefObject<HTMLDivElement>; transformXPercent: number }) {
+    // TODO: ここは関数の外で定義する
     const [cardWidth, setCardWidth] = useState(300); // ボーダーとかも含めたカードの横幅
     const [cardHeight, setCardHeight] = useState(400); // ボーダーとかも含めたカードの縦幅
     const [cardGap, setCardGap] = useState(20);
