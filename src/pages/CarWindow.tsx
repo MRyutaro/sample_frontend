@@ -43,15 +43,15 @@ const cards = [
         description: "This is a description for card 10",
     },
 ];
-console.log(1);
+
 // カードコンポーネント
 // containerRef: カードを含むコンテナのref. 親要素の幅を取得するために使用
 // transformXPercent: どれだけ移動させるかを0~100%で指定
 export function Cards({ containerRef, transformXPercent }: { containerRef: React.RefObject<HTMLDivElement>; transformXPercent: number }) {
     const [cardWidth, setCardWidth] = useState(300); // ボーダーとかも含めたカードの横幅
     const [cardHeight, setCardHeight] = useState(400); // ボーダーとかも含めたカードの縦幅
-    const [cardGap, setCardGap] = useState(20);
-    const [containerPadding, setContainerPadding] = useState(20);
+    const [cardGap, setCardGap] = useState(50);
+    const [containerPadding, setContainerPadding] = useState(200);
     const [transformX, setTransformX] = useState(0);
 
     // useCallbackを使うことで再レンダリング時に関数が再生成されるのを防ぐ。多分。
@@ -84,7 +84,8 @@ export function Cards({ containerRef, transformXPercent }: { containerRef: React
             style={{
                 display: "flex", // flexを使うことで横並びになる
                 gap: `${cardGap}px`, // カード間の間隔
-                padding: `${containerPadding}px`,
+                paddingLeft: `${containerPadding}px`,
+                paddingRight: `${containerPadding}px`,
                 transform: `translateX(-${transformX}px)`,
                 // transition: "transform 0.5s",
             }}
@@ -96,7 +97,7 @@ export function Cards({ containerRef, transformXPercent }: { containerRef: React
                         // カード内のpaddingとborderの分だけ引いて補正
                         width: `${cardWidth - 40 - 2}px`,
                         height: `${cardHeight - 40 - 2}px`,
-                        background: "white",
+                        // background: "white",
                         padding: `20px`,
                         border: "1px solid black",
                         borderRadius: "10px",
@@ -146,6 +147,7 @@ export function CarWindow() {
         // console.log(`innerHeight: ${window.innerHeight}`);
         const tmpStickyTop = (window.innerHeight - 400) / 2;
         // console.log(tmpStickyTop);
+        // TODO: containerPaddingにも依存する
         setStickyTop(tmpStickyTop);
     }, [setStickyTop]);
 
