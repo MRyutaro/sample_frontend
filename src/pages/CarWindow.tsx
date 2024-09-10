@@ -93,11 +93,12 @@ export function Cards({ containerRef, transformXPercent }: { containerRef: React
             {cards.map((card, idx) => (
                 <div
                     key={idx}
+                    className="card"
                     style={{
                         // カード内のpaddingとborderの分だけ引いて補正
                         width: `${cardWidth - 40 - 2}px`,
                         height: `${cardHeight - 40 - 2}px`,
-                        // background: "white",
+                        background: "transparent",
                         padding: `20px`,
                         border: "1px solid black",
                         borderRadius: "10px",
