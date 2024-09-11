@@ -51,6 +51,7 @@ export function CarWindow() {
                     alt="water"
                 />
             </div>
+
             <div
                 style={{
                     height: "100vh",
