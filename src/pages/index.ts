@@ -9,3 +9,4 @@ export { HorizontalScroll } from "./HorizontalScroll";
 export { HorizontalScrollStop } from "./HorizontalScrollStop";
 export { MovingImageByScroll } from "./MovingImageByScroll";
 export { CarWindow } from "./CarWindow";
+export { CarWindowHorizontalScrollStop } from "./CarWindowHorizontalScrollStop";

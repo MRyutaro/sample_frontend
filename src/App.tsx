@@ -12,6 +12,7 @@ import {
     HorizontalScrollStop,
     MovingImageByScroll,
     CarWindow,
+    CarWindowHorizontalScrollStop,
 } from "./pages";
 
 function Layout() {
@@ -41,6 +42,8 @@ function Layout() {
             <Link to="/moving-image-by-scroll">Moving Image By Scroll</Link>
             {" | "}
             <Link to="/car-window">Car Window</Link>
+            {" | "}
+            <Link to="/car-window-horizontal-scroll-stop">Car Window Horizontal Scroll Stop</Link>
             <Outlet />
         </div>
     );
@@ -61,6 +64,7 @@ export default function App() {
                     <Route path="/horizontal-scroll-stop" element={<HorizontalScrollStop />} />
                     <Route path="/moving-image-by-scroll" element={<MovingImageByScroll />} />
                     <Route path="/car-window" element={<CarWindow />} />
+                    <Route path="/car-window-horizontal-scroll-stop" element={<CarWindowHorizontalScrollStop />} />
                 </Route>
             </Routes>
         </Router>
