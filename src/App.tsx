@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet, Link } from "react-router-dom";
-import { Avatar, Container } from "@mui/material";
+import { Avatar, Button, Container } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import MDEditor from "@uiw/react-md-editor";
 import { useAtom, useAtomValue } from "jotai";
@@ -19,11 +19,11 @@ import {
     CarWindow,
     CarWindowHorizontalScrollStop,
 } from "./pages";
+import { useMarkdownMemo } from "./hooks/useMarkdownMemo";
 import { userAtom } from "./atoms/userAtom";
 
 function Layout() {
     const user = useAtomValue(userAtom);
-    console.log(user);
 
     return (
         <div
@@ -67,7 +67,7 @@ function Layout() {
 }
 
 function IndexPage() {
-    const [value, setValue] = useState<string>("**Markdown**");
+    const { markdownMemo, setMarkdownMemo, uploadMarkdownMemo } = useMarkdownMemo();
     const [user, setUser] = useAtom(userAtom);
     const [loading, setLoading] = useState(true);
 
@@ -158,18 +158,39 @@ function IndexPage() {
 
             {user && (
                 <>
-                    <MDEditor value={value} height="100%" onChange={(value) => setValue(value || "")} />
-                    <button
-                        onClick={() => {
-                            auth.signOut();
-                        }}
+                    <MDEditor value={markdownMemo} onChange={setMarkdownMemo} height="100%" />
+                    <div
                         style={{
-                            marginTop: "20px",
-                            marginBottom: "20px",
+                            display: "flex",
+                            flexDirection: "column",
                         }}
                     >
-                        ログアウト
-                    </button>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                                uploadMarkdownMemo();
+                            }}
+                            style={{
+                                marginTop: "20px",
+                            }}
+                        >
+                            保存
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="error"
+                            onClick={() => {
+                                auth.signOut();
+                            }}
+                            style={{
+                                marginTop: "40px",
+                                marginBottom: "20px",
+                            }}
+                        >
+                            ログアウト
+                        </Button>
+                    </div>
                 </>
             )}
         </Container>
