@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet, Link } from "react-router-dom";
-import { Container } from "@mui/material";
+import { Avatar, Container } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import MDEditor from "@uiw/react-md-editor";
 
 import { auth } from "./firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import {
     Boxes,
     RotatingBoxes,
@@ -52,6 +53,22 @@ function Layout() {
 function IndexPage() {
     const [value, setValue] = useState<string>("**Markdown**");
 
+    const handleLogin = useCallback((e: any) => {
+        e.preventDefault();
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                alert(errorCode + " " + errorMessage);
+            });
+    }, []);
+
     return (
         <Container>
             <h1>フロントエンドのサンプル集</h1>
@@ -84,7 +101,36 @@ function IndexPage() {
                     <Link to="/car-window">車窓</Link>
                 </li>
             </ul>
+            <div
+                style={{
+                    marginTop: "20px",
+                    marginBottom: "20px",
+                }}
+            >
+                <form onSubmit={handleLogin}>
+                    <div>
+                        <input name="email" type="email" placeholder="email" />
+                    </div>
+                    <div>
+                        <input name="password" type="password" placeholder="password" />
+                    </div>
+                    <div>
+                        <button>ログイン</button>
+                    </div>
+                </form>
+            </div>
             <MDEditor value={value} height="100%" onChange={(value) => setValue(value || "")} />
+            <button
+                onClick={() => {
+                    auth.signOut();
+                }}
+                style={{
+                    marginTop: "20px",
+                    marginBottom: "20px",
+                }}
+            >
+                ログアウト
+            </button>
         </Container>
     );
 }
