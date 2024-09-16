@@ -38,6 +38,7 @@ function Layout() {
                         top: 10,
                         left: 10,
                         cursor: "pointer",
+                        zIndex: 1000,
                     }}
                 />
             </Link>
