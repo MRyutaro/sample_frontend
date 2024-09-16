@@ -1,8 +1,10 @@
-import "./App.css";
+import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet, Link } from "react-router-dom";
 import { Container } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
+import MDEditor from "@uiw/react-md-editor";
 
+import { auth } from "./firebase";
 import {
     Boxes,
     RotatingBoxes,
@@ -48,6 +50,8 @@ function Layout() {
 }
 
 function IndexPage() {
+    const [value, setValue] = useState<string>("**Markdown**");
+
     return (
         <Container>
             <h1>フロントエンドのサンプル集</h1>
@@ -80,6 +84,7 @@ function IndexPage() {
                     <Link to="/car-window">車窓</Link>
                 </li>
             </ul>
+            <MDEditor value={value} height="100%" onChange={(value) => setValue(value || "")} />
         </Container>
     );
 }
