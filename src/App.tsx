@@ -3,7 +3,18 @@ import { BrowserRouter as Router, Routes, Route, Outlet, Link } from "react-rout
 import { Container } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 
-import { Boxes, RotatingBoxes, RotatingCards, HeartBeat, ProgressBar, HorizontalScroll, HorizontalScrollStop, MovingImageByScroll, CarWindow } from "./pages";
+import {
+    Boxes,
+    RotatingBoxes,
+    RotatingCards,
+    HeartBeat,
+    ProgressBar,
+    HorizontalScroll,
+    HorizontalScrollStop,
+    MovingImageByScroll,
+    CarWindow,
+    CarWindowHorizontalScrollStop,
+} from "./pages";
 
 function Layout() {
     return (
@@ -87,6 +98,7 @@ export default function App() {
                     <Route path="/horizontal-scroll-stop" element={<HorizontalScrollStop />} />
                     <Route path="/moving-image-by-scroll" element={<MovingImageByScroll />} />
                     <Route path="/car-window" element={<CarWindow />} />
+                    <Route path="/car-window-horizontal-scroll-stop" element={<CarWindowHorizontalScrollStop />} />
                 </Route>
             </Routes>
         </Router>
