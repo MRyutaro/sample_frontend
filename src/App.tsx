@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Outlet, Link } from "react-rout
 import { Avatar, Container } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import MDEditor from "@uiw/react-md-editor";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
 import { auth } from "./firebase";
@@ -22,6 +22,9 @@ import {
 import { userAtom } from "./atoms/userAtom";
 
 function Layout() {
+    const user = useAtomValue(userAtom);
+    console.log(user);
+
     return (
         <div
             style={{
@@ -47,6 +50,17 @@ function Layout() {
                     }}
                 />
             </Link>
+            {user && (
+                <Avatar
+                    alt={user?.displayName || ""}
+                    src={user?.photoURL || ""}
+                    sx={{
+                        position: "fixed",
+                        top: 10,
+                        right: 10,
+                    }}
+                />
+            )}
             <Outlet />
         </div>
     );
