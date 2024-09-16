@@ -1,18 +1,9 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Outlet, Link } from "react-router-dom";
+import { Container } from "@mui/material";
+import HomeIcon from "@mui/icons-material/Home";
 
-import {
-    IndexPage,
-    Boxes,
-    RotatingBoxes,
-    RotatingCards,
-    HeartBeat,
-    ProgressBar,
-    HorizontalScroll,
-    HorizontalScrollStop,
-    MovingImageByScroll,
-    CarWindow,
-} from "./pages";
+import { Boxes, RotatingBoxes, RotatingCards, HeartBeat, ProgressBar, HorizontalScroll, HorizontalScrollStop, MovingImageByScroll, CarWindow } from "./pages";
 
 function Layout() {
     return (
@@ -22,27 +13,62 @@ function Layout() {
                 width: "100%",
             }}
         >
-            <Link to="/">Index</Link>
-            {" | "}
-            <Link to="/boxes">Boxes</Link>
-            {" | "}
-            <Link to="/rotating-boxes">Rotating Boxes</Link>
-            {" | "}
-            <Link to="/rotating-cards">Rotating Cards</Link>
-            {" | "}
-            <Link to="/heart-beat">HeartBeat</Link>
-            {" | "}
-            <Link to="/progress-bar">ProgressBar</Link>
-            {" | "}
-            <Link to="/horizontal-scroll">Horizontal Scroll</Link>
-            {" | "}
-            <Link to="/horizontal-scroll-stop">Horizontal Scroll Stop</Link>
-            {" | "}
-            <Link to="/moving-image-by-scroll">Moving Image By Scroll</Link>
-            {" | "}
-            <Link to="/car-window">Car Window</Link>
+            <Link
+                to="/"
+                style={{
+                    textDecoration: "none",
+                    color: "black",
+                }}
+            >
+                <HomeIcon
+                    sx={{
+                        fontSize: 40,
+                        position: "fixed",
+                        top: 10,
+                        left: 10,
+                        cursor: "pointer",
+                    }}
+                />
+            </Link>
             <Outlet />
         </div>
+    );
+}
+
+function IndexPage() {
+    return (
+        <Container>
+            <h1>フロントエンドのサンプル集</h1>
+            <ul>
+                <li>
+                    <Link to="/boxes">3Dのボックス</Link>
+                </li>
+                <li>
+                    <Link to="/rotating-boxes">ボックスの回転</Link>
+                </li>
+                <li>
+                    <Link to="/rotating-cards">カードの回転</Link>
+                </li>
+                <li>
+                    <Link to="/heart-beat">心臓の拍動</Link>
+                </li>
+                <li>
+                    <Link to="/progress-bar">プログレスバー</Link>
+                </li>
+                <li>
+                    <Link to="/horizontal-scroll">横スクロール</Link>
+                </li>
+                <li>
+                    <Link to="/horizontal-scroll-stop">横スクロール中に縦スクロールを止める</Link>
+                </li>
+                <li>
+                    <Link to="/moving-image-by-scroll">スクロール量に応じて画像を動かす</Link>
+                </li>
+                <li>
+                    <Link to="/car-window">車窓</Link>
+                </li>
+            </ul>
+        </Container>
     );
 }
 

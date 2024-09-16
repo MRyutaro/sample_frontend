@@ -1,5 +1,4 @@
 // ページコンポーネントをまとめてexportするためのファイル
-export { IndexPage } from "./IndexPage";
 export { Boxes } from "./Boxes";
 export { RotatingBoxes } from "./RotatingBoxes";
 export { RotatingCards } from "./RotatingCards";
