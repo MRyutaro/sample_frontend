@@ -67,7 +67,7 @@ function Layout() {
 }
 
 function IndexPage() {
-    const { markdownMemo, setMarkdownMemo, uploadMarkdownMemo } = useMarkdownMemo();
+    const { markdownMemo, isSaved, setMarkdownMemo, uploadMarkdownMemo } = useMarkdownMemo();
     const [user, setUser] = useAtom(userAtom);
     const [loading, setLoading] = useState(true);
 
@@ -165,6 +165,7 @@ function IndexPage() {
                             flexDirection: "column",
                         }}
                     >
+                        {isSaved ? <>保存済み</> : <>未保存</>}
                         <Button
                             variant="contained"
                             color="primary"
