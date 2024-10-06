@@ -11,7 +11,7 @@ import { themeAtom } from "./atoms/themeAtom";
 import { userAtom } from "./atoms/userAtom";
 import { Menu } from "./components/menu";
 import { UserModal } from "./components/userModal";
-import { auth } from "./firebase";
+import { auth, database, get, ref, set } from "./firebase";
 import {
 	Boxes,
 	CarWindow,
@@ -44,16 +44,37 @@ function Layout() {
 	);
 }
 
-async function saveToStorage(jsonBlocks: Block[]) {
-	// Save contents to local storage. You might want to debounce this or replace
-	// with a call to your API / database.
-	localStorage.setItem("editorContent", JSON.stringify(jsonBlocks));
+async function saveToFirebase(jsonBlocks: Block[]) {
+	try {
+		// Firebaseのデータベース参照を取得
+		const contentRef = ref(database, "editorContent");
+		// Firebaseにデータを保存
+		await set(contentRef, JSON.stringify(jsonBlocks));
+		console.log("Data saved to Firebase successfully");
+	} catch (error) {
+		console.error("Error saving data to Firebase:", error);
+	}
 }
 
-async function loadFromStorage() {
-	// Gets the previously stored editor contents.
-	const storageString = localStorage.getItem("editorContent");
-	return storageString ? (JSON.parse(storageString) as PartialBlock[]) : undefined;
+async function loadFromFirebase() {
+	try {
+		// Firebaseのデータベース参照を取得
+		const contentRef = ref(database, "editorContent");
+		// Firebaseからデータを取得
+		const snapshot = await get(contentRef);
+		if (snapshot.exists()) {
+			// jsonに変換して保存、読み込むときにパースするという処理にしないと以下のエラーが出た
+			// Error creating document from blocks passed as `initialContent`: NaN
+			const jsonBlocks = JSON.parse(snapshot.val());
+			return jsonBlocks as PartialBlock[];
+		} else {
+			console.log("No data available");
+			return undefined;
+		}
+	} catch (error) {
+		console.error("Error loading data from Firebase:", error);
+		return undefined;
+	}
 }
 
 function IndexPage() {
@@ -89,7 +110,7 @@ function IndexPage() {
 
 	// Loads the previously stored editor contents.
 	useEffect(() => {
-		loadFromStorage().then((content) => {
+		loadFromFirebase().then((content: PartialBlock[] | undefined) => {
 			setInitialContent(content);
 		});
 	}, []);
@@ -100,11 +121,15 @@ function IndexPage() {
 	const editor = useMemo(() => {
 		if (initialContent === "loading") {
 			return undefined;
+		} else if (initialContent === undefined) {
+			console.log("initialContent is undefined");
+			return undefined;
+		} else {
+			return BlockNoteEditor.create({
+				initialContent: initialContent,
+				dictionary: locales.ja,
+			});
 		}
-		return BlockNoteEditor.create({
-			initialContent: initialContent,
-			dictionary: locales.ja,
-		});
 	}, [initialContent]);
 
 	if (editor === undefined) {
@@ -143,7 +168,7 @@ function IndexPage() {
 					<BlockNoteView
 						editor={editor}
 						onChange={() => {
-							saveToStorage(editor.document);
+							saveToFirebase(editor.document);
 						}}
 						theme={theme}
 					/>
