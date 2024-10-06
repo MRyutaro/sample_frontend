@@ -168,6 +168,7 @@ function IndexPage() {
 					<BlockNoteView
 						editor={editor}
 						onChange={() => {
+							// TODO: 変更の都度保存するか、もしくはボタンで管理するかをFirebaseの転送量に応じて検討する
 							saveToFirebase(editor.document);
 						}}
 						theme={theme}
