@@ -1,6 +1,6 @@
 import { Block, BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
-import HomeIcon from "@mui/icons-material/Home";
+
 import { Container } from "@mui/material";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { useAtom, useAtomValue } from "jotai";
@@ -10,6 +10,7 @@ import { Link, Outlet, Route, BrowserRouter as Router, Routes } from "react-rout
 import { themeAtom } from "./atoms/themeAtom";
 import { userAtom } from "./atoms/userAtom";
 import { UserModal } from "./components/userModal";
+import { Menu } from "./components/menu";
 import { auth } from "./firebase";
 import {
 	Boxes,
@@ -35,24 +36,7 @@ function Layout() {
 				width: "100%",
 			}}
 		>
-			<Link
-				to="/"
-				style={{
-					textDecoration: "none",
-					color: "black",
-				}}
-			>
-				<HomeIcon
-					sx={{
-						fontSize: 40,
-						position: "fixed",
-						top: 10,
-						left: 10,
-						cursor: "pointer",
-						zIndex: 1000,
-					}}
-				/>
-			</Link>
+            <Menu />
 			<UserModal />
 			<Outlet />
 		</div>
@@ -95,15 +79,11 @@ function IndexPage() {
 		const email = e.target.email.value;
 		const password = e.target.password.value;
 
-		signInWithEmailAndPassword(auth, email, password)
-			.then((userCredential) => {
-				const user = userCredential.user;
-			})
-			.catch((error) => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				alert(errorCode + " " + errorMessage);
-			});
+		signInWithEmailAndPassword(auth, email, password).catch((error) => {
+			const errorCode = error.code;
+			const errorMessage = error.message;
+			alert(errorCode + " " + errorMessage);
+		});
 	}, []);
 
 	// Loads the previously stored editor contents.
@@ -129,36 +109,6 @@ function IndexPage() {
 
 	return (
 		<Container>
-			<h1>フロントエンドのサンプル集</h1>
-			<ul>
-				<li>
-					<Link to="/boxes">3Dのボックス</Link>
-				</li>
-				<li>
-					<Link to="/rotating-boxes">ボックスの回転</Link>
-				</li>
-				<li>
-					<Link to="/rotating-cards">カードの回転</Link>
-				</li>
-				<li>
-					<Link to="/heart-beat">心臓の拍動</Link>
-				</li>
-				<li>
-					<Link to="/progress-bar">プログレスバー</Link>
-				</li>
-				<li>
-					<Link to="/horizontal-scroll">横スクロール</Link>
-				</li>
-				<li>
-					<Link to="/horizontal-scroll-stop">横スクロール中に縦スクロールを止める</Link>
-				</li>
-				<li>
-					<Link to="/moving-image-by-scroll">スクロール量に応じて画像を動かす</Link>
-				</li>
-				<li>
-					<Link to="/car-window">車窓</Link>
-				</li>
-			</ul>
 			{loading ? (
 				<p>loading...</p>
 			) : user ? (
@@ -191,7 +141,7 @@ function IndexPage() {
 						onChange={() => {
 							saveToStorage(editor.document);
 						}}
-                        theme={theme}
+						theme={theme}
 					/>
 					<div
 						style={{
