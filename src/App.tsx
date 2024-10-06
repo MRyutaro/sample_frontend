@@ -121,9 +121,6 @@ function IndexPage() {
 	const editor = useMemo(() => {
 		if (initialContent === "loading") {
 			return undefined;
-		} else if (initialContent === undefined) {
-			console.log("initialContent is undefined");
-			return undefined;
 		} else {
 			return BlockNoteEditor.create({
 				initialContent: initialContent,
