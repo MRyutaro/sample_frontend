@@ -72,48 +72,52 @@ export function Menu() {
 					height: "100%",
 					bgcolor: "background.paper",
 					boxShadow: isOpen ? 3 : 0,
-                    p: isOpen ? 2 : 0,
+					p: isOpen ? 2 : 0,
 					overflowX: "hidden", // 横スクロールを隠す
-					transition: "width 0.3s ease", // スムーズなアニメーション
+					transition: "width 0.3s ease",
 					zIndex: 999,
 				}}
 			>
-				{/* メニューのコンテンツ */}
-				<Typography variant="h6" component="div">
-					フロントエンドのサンプル集
-				</Typography>
-				<ul>
-					<li>
-						<Link to="/">ホーム</Link>
-					</li>
-					<li>
-						<Link to="/boxes">3Dのボックス</Link>
-					</li>
-					<li>
-						<Link to="/rotating-boxes">ボックスの回転</Link>
-					</li>
-					<li>
-						<Link to="/rotating-cards">カードの回転</Link>
-					</li>
-					<li>
-						<Link to="/heart-beat">心臓の拍動</Link>
-					</li>
-					<li>
-						<Link to="/progress-bar">プログレスバー</Link>
-					</li>
-					<li>
-						<Link to="/horizontal-scroll">横スクロール</Link>
-					</li>
-					<li>
-						<Link to="/horizontal-scroll-stop">横スクロール中に縦スクロールを止める</Link>
-					</li>
-					<li>
-						<Link to="/moving-image-by-scroll">スクロール量に応じて画像を動かす</Link>
-					</li>
-					<li>
-						<Link to="/car-window">車窓</Link>
-					</li>
-				</ul>
+				{isOpen && (
+					<>
+						{/* メニューのコンテンツ */}
+						<Typography variant="h6" component="div">
+							フロントエンドのサンプル集
+						</Typography>
+						<ul>
+							<li>
+								<Link to="/">ホーム</Link>
+							</li>
+							<li>
+								<Link to="/boxes">3Dのボックス</Link>
+							</li>
+							<li>
+								<Link to="/rotating-boxes">ボックスの回転</Link>
+							</li>
+							<li>
+								<Link to="/rotating-cards">カードの回転</Link>
+							</li>
+							<li>
+								<Link to="/heart-beat">心臓の拍動</Link>
+							</li>
+							<li>
+								<Link to="/progress-bar">プログレスバー</Link>
+							</li>
+							<li>
+								<Link to="/horizontal-scroll">横スクロール</Link>
+							</li>
+							<li>
+								<Link to="/horizontal-scroll-stop">横スクロール中に縦スクロールを止める</Link>
+							</li>
+							<li>
+								<Link to="/moving-image-by-scroll">スクロール量に応じて画像を動かす</Link>
+							</li>
+							<li>
+								<Link to="/car-window">車窓</Link>
+							</li>
+						</ul>
+					</>
+				)}
 			</Box>
 		</>
 	);

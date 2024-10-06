@@ -75,11 +75,10 @@ export function UserModal(): JSX.Element {
 					>
 						ログアウト
 					</Button>
-					<hr />
-					<Typography id="user-modal-title" variant="h6" component="h2" sx={{ mt: 2 }}>
+					<Divider sx={{ mt: 2, mb: 2 }} />
+					<Typography id="user-modal-title" variant="h6" component="h2">
 						設定
 					</Typography>
-					<Divider />
 					<Button
 						variant="contained"
 						color="primary"

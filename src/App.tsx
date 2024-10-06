@@ -1,16 +1,16 @@
-import { Block, BlockNoteEditor, PartialBlock } from "@blocknote/core";
+import { Block, BlockNoteEditor, PartialBlock, locales } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
 
 import { Container } from "@mui/material";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { useAtom, useAtomValue } from "jotai";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link, Outlet, Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Outlet, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import { themeAtom } from "./atoms/themeAtom";
 import { userAtom } from "./atoms/userAtom";
-import { UserModal } from "./components/userModal";
 import { Menu } from "./components/menu";
+import { UserModal } from "./components/userModal";
 import { auth } from "./firebase";
 import {
 	Boxes,
@@ -36,7 +36,7 @@ function Layout() {
 				width: "100%",
 			}}
 		>
-            <Menu />
+			<Menu />
 			<UserModal />
 			<Outlet />
 		</div>
@@ -100,7 +100,10 @@ function IndexPage() {
 		if (initialContent === "loading") {
 			return undefined;
 		}
-		return BlockNoteEditor.create({ initialContent });
+		return BlockNoteEditor.create({
+			initialContent: initialContent,
+			dictionary: locales.ja,
+		});
 	}, [initialContent]);
 
 	if (editor === undefined) {
