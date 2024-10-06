@@ -1,15 +1,15 @@
 import { Block, BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
 import HomeIcon from "@mui/icons-material/Home";
-import LightModeIcon from "@mui/icons-material/LightMode";
-import { Avatar, Button, Container } from "@mui/material";
+import { Container } from "@mui/material";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { useAtom, useAtomValue } from "jotai";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, Outlet, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
+import { themeAtom } from "./atoms/themeAtom";
 import { userAtom } from "./atoms/userAtom";
+import { UserModal } from "./components/userModal";
 import { auth } from "./firebase";
 import {
 	Boxes,
@@ -28,8 +28,6 @@ import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 
 function Layout() {
-	const user = useAtomValue(userAtom);
-
 	return (
 		<div
 			style={{
@@ -55,17 +53,7 @@ function Layout() {
 					}}
 				/>
 			</Link>
-			{user && (
-				<Avatar
-					alt={user?.displayName || ""}
-					src={user?.photoURL || ""}
-					sx={{
-						position: "fixed",
-						top: 10,
-						right: 10,
-					}}
-				/>
-			)}
+			<UserModal />
 			<Outlet />
 		</div>
 	);
@@ -85,8 +73,8 @@ async function loadFromStorage() {
 
 function IndexPage() {
 	const [user, setUser] = useAtom(userAtom);
+	const theme = useAtomValue(themeAtom);
 	const [loading, setLoading] = useState(true);
-	const [theme, setTheme] = useState<"light" | "dark">("light");
 	const [initialContent, setInitialContent] = useState<PartialBlock[] | undefined | "loading">("loading");
 
 	// ログイン状態の初期化
@@ -138,7 +126,6 @@ function IndexPage() {
 	if (editor === undefined) {
 		return "Loading content...";
 	}
-	// =================
 
 	return (
 		<Container>
@@ -204,16 +191,8 @@ function IndexPage() {
 						onChange={() => {
 							saveToStorage(editor.document);
 						}}
+                        theme={theme}
 					/>
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={() => {
-							setTheme(theme === "light" ? "dark" : "light");
-						}}
-					>
-						{theme === "light" ? <DarkModeIcon /> : <LightModeIcon />}
-					</Button>
 					<div
 						style={{
 							display: "flex",
@@ -233,19 +212,6 @@ function IndexPage() {
 						>
 							保存
 						</Button> */}
-						<Button
-							variant="contained"
-							color="error"
-							onClick={() => {
-								auth.signOut();
-							}}
-							style={{
-								marginTop: "40px",
-								marginBottom: "20px",
-							}}
-						>
-							ログアウト
-						</Button>
 					</div>
 				</>
 			)}
