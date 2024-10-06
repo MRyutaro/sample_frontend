@@ -24,7 +24,7 @@ export function UserModal(): JSX.Element {
 			<Avatar
 				alt={user?.displayName || ""}
 				src={user?.photoURL || ""}
-				onClick={handleOpen} // クリックでモーダルを開く
+				onClick={handleOpen}
 				sx={{
 					position: "fixed",
 					top: 10,
@@ -32,6 +32,7 @@ export function UserModal(): JSX.Element {
 					width: 40,
 					height: 40,
 					cursor: "pointer",
+					zIndex: 1000,
 				}}
 			/>
 

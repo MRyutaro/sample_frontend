@@ -48,7 +48,7 @@ export function Menu() {
 			{/* メニューが開いている間はホームアイコンを非表示にし、トランジションを追加 */}
 			<MenuIcon
 				sx={{
-					fontSize: 40,
+					fontSize: 32,
 					position: "fixed",
 					top: 10,
 					left: 10,
@@ -57,6 +57,9 @@ export function Menu() {
 					transition: "opacity 0.3s ease",
 					opacity: isOpen ? 0 : 1, // 開いているときは非表示
 					pointerEvents: isOpen ? "none" : "auto", // メニューが開いている時にクリックできないようにする
+                    backgroundColor: "lightgray",
+                    borderRadius: "50%",
+                    padding: "4px",
 				}}
 				onClick={toggleMenu} // クリックでメニューの開閉をトグル
 			/>

@@ -1,0 +1,4 @@
+/* 参考：https://www.blocknotejs.org/docs/styling-theming/overriding-css */
+.bn-editor {
+	padding: 0;
+}
