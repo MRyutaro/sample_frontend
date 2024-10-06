@@ -84,6 +84,9 @@ export function Menu() {
 				</Typography>
 				<ul>
 					<li>
+						<Link to="/">ホーム</Link>
+					</li>
+					<li>
 						<Link to="/boxes">3Dのボックス</Link>
 					</li>
 					<li>
