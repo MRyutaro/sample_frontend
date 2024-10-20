@@ -1,5 +1,7 @@
-import { Block, BlockNoteEditor, PartialBlock, locales } from "@blocknote/core";
+import { Block, BlockNoteEditor, PartialBlock, locales, BlockNoteSchema, defaultBlockSpecs, insertOrUpdateBlock, filterSuggestionItems } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
+import { SuggestionMenuController, getDefaultReactSlashMenuItems, useCreateBlockNote } from "@blocknote/react";
+
 import { Container } from "@mui/material";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { useAtom, useAtomValue } from "jotai";
@@ -24,6 +26,10 @@ import {
     RotatingCards,
 } from "./pages";
 
+// これがBlockNoteのカスタム用のコンポーネント
+import { RiAlertFill } from "react-icons/ri";
+import { Alert } from "./components/Alert";
+
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import "./styles/App.css";
@@ -43,7 +49,7 @@ function Layout() {
     );
 }
 
-async function saveToFirebase(jsonBlocks: Block[]) {
+async function saveToFirebase(jsonBlocks: any) {
     try {
         // Firebaseのデータベース参照を取得
         const contentRef = ref(database, "editorContent");
@@ -75,6 +81,28 @@ async function loadFromFirebase() {
         return undefined;
     }
 }
+
+const schema = BlockNoteSchema.create({
+    blockSpecs: {
+        // Adds all default blocks.
+        ...defaultBlockSpecs,
+        // Adds the Alert block.
+        alert: Alert,
+    },
+});
+
+// Slash menu item to insert an Alert block
+const insertAlert = (editor: typeof schema.BlockNoteEditor) => ({
+    title: "Alert",
+    onItemClick: () => {
+        insertOrUpdateBlock(editor, {
+            type: "alert",
+        });
+    },
+    aliases: ["alert", "notification", "emphasize", "warning", "error", "info", "success"],
+    group: "Other",
+    icon: <RiAlertFill />,
+});
 
 function IndexPage() {
     const [user, setUser] = useAtom(userAtom);
@@ -119,9 +147,11 @@ function IndexPage() {
         if (initialContent === "loading") {
             return undefined;
         } else {
+            // 引数一覧 -> https://www.blocknotejs.org/docs/editor-basics/setup
             return BlockNoteEditor.create({
                 initialContent: initialContent,
                 dictionary: locales.ja,
+                schema: schema,
             });
         }
     }, [initialContent]);
@@ -152,7 +182,7 @@ function IndexPage() {
                         clearTimeout(messageTimeoutRef.current);
                     }
 
-					// N秒後にメッセージを非表示
+                    // N秒後にメッセージを非表示
                     messageTimeoutRef.current = setTimeout(() => {
                         setSaveStatus("hidden");
                     }, 1000);
@@ -197,16 +227,24 @@ function IndexPage() {
                     <div
                         style={{
                             height: "60px",
-							display: "flex",
-							alignItems: "center",
+                            display: "flex",
+                            alignItems: "center",
                         }}
                     >
                         {saveStatus === "unsaved" && <span>未保存</span>}
                         {saveStatus === "saving" && <span>保存中...</span>}
                         {saveStatus === "saved" && <span>保存済み</span>}
                         {saveStatus === "hidden" && <span></span>}
-					</div>
-                    <BlockNoteView editor={editor} onChange={handleEditorChange} theme={theme} />
+                    </div>
+                    <BlockNoteView editor={editor} onChange={handleEditorChange} theme={theme} slashMenu={false}>
+                        <SuggestionMenuController
+                            triggerCharacter={"/"}
+                            getItems={async (query) =>
+                                // Gets all default slash menu items and `insertAlert` item.
+                                filterSuggestionItems([...getDefaultReactSlashMenuItems(editor), insertAlert(editor)], query)
+                            }
+                        />
+                    </BlockNoteView>
                 </>
             )}
         </Container>
