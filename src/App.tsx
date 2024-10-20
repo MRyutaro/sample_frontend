@@ -93,15 +93,17 @@ const schema = BlockNoteSchema.create({
 
 // Slash menu item to insert an Alert block
 const insertAlert = (editor: typeof schema.BlockNoteEditor) => ({
-    title: "Alert",
+    key: "alert",
+    title: "アラート",
+    subtext: "アラートを追加します",
     onItemClick: () => {
         insertOrUpdateBlock(editor, {
             type: "alert",
         });
     },
     aliases: ["alert", "notification", "emphasize", "warning", "error", "info", "success"],
-    group: "Other",
-    icon: <RiAlertFill />,
+    group: "基本ブロック",
+    icon: <RiAlertFill size={18} />,
 });
 
 function IndexPage() {
@@ -239,10 +241,23 @@ function IndexPage() {
                     <BlockNoteView editor={editor} onChange={handleEditorChange} theme={theme} slashMenu={false}>
                         <SuggestionMenuController
                             triggerCharacter={"/"}
-                            getItems={async (query) =>
-                                // Gets all default slash menu items and `insertAlert` item.
-                                filterSuggestionItems([...getDefaultReactSlashMenuItems(editor), insertAlert(editor)], query)
-                            }
+                            getItems={async (query) => {
+                                // Gets all default slash menu items
+                                const defaultItems = getDefaultReactSlashMenuItems(editor);
+
+                                const insertPosition = 7; // N番目に挿入する
+                                const allItems = [
+                                    ...defaultItems.slice(0, insertPosition), // 0番目からN番目のアイテムを追加
+                                    insertAlert(editor), // N番目にinsertAlertを挿入
+                                    ...defaultItems.slice(insertPosition), // N番目から最後までのアイテムを追加
+                                ];
+
+                                // Log the combined items to the console
+                                console.log("Combined Items (Default + InsertAlert):", allItems);
+
+                                // Return the filtered suggestion items
+                                return filterSuggestionItems(allItems, query);
+                            }}
                         />
                     </BlockNoteView>
                 </>
