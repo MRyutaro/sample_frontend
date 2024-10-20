@@ -81,7 +81,9 @@ function IndexPage() {
     const theme = useAtomValue(themeAtom);
     const [loading, setLoading] = useState(true);
     const [initialContent, setInitialContent] = useState<PartialBlock[] | undefined | "loading">("loading");
+    const [saveStatus, setSaveStatus] = useState<"hidden" | "unsaved" | "saving" | "saved">("hidden"); // 保存状態を管理
     const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null); // タイマーを管理するためのuseRef
+    const messageTimeoutRef = useRef<NodeJS.Timeout | null>(null); // メッセージを表示するためのタイマー
 
     // ログイン状態の初期化
     useEffect(() => {
@@ -124,21 +126,40 @@ function IndexPage() {
         }
     }, [initialContent]);
 
-	const handleEditorChange = () => {
-		if (!editor) {
-			return; // editorがundefinedの場合は処理を中断
-		}
-	
-		if (saveTimeoutRef.current) {
-			clearTimeout(saveTimeoutRef.current); // 既存のタイマーをクリア
-		}
-		// N秒間更新がなければ保存
-		saveTimeoutRef.current = setTimeout(() => {
-			if (editor) { // 再度editorがundefinedでないか確認
-				saveToFirebase(editor.document); // 保存処理
-			}
-		}, 2000);
-	};
+    const handleEditorChange = () => {
+        if (!editor) {
+            return; // editorがundefinedの場合は処理を中断
+        }
+
+        // 保存状態を「未保存」に設定
+        setSaveStatus("unsaved");
+
+        if (saveTimeoutRef.current) {
+            clearTimeout(saveTimeoutRef.current); // 既存のタイマーをクリア
+        }
+
+        // N秒後に保存処理を実行
+        saveTimeoutRef.current = setTimeout(() => {
+            if (editor) {
+                // 保存中にステータスを更新
+                setSaveStatus("saving");
+                saveToFirebase(editor.document).then(() => {
+                    // 保存が完了したら「保存済み」に変更
+                    setSaveStatus("saved");
+
+                    // 一定時間後に保存メッセージを非表示
+                    if (messageTimeoutRef.current) {
+                        clearTimeout(messageTimeoutRef.current);
+                    }
+
+					// N秒後にメッセージを非表示
+                    messageTimeoutRef.current = setTimeout(() => {
+                        setSaveStatus("hidden");
+                    }, 1000);
+                });
+            }
+        }, 2000);
+    };
 
     if (editor === undefined) {
         return "Loading content...";
@@ -173,17 +194,19 @@ function IndexPage() {
 
             {user && (
                 <>
-					<div
-						id="spacer"
-						style={{
-							height: "60px",
-						}}
-					></div>
-                    <BlockNoteView
-                        editor={editor}
-                        onChange={handleEditorChange}
-                        theme={theme}
-                    />
+                    <div
+                        style={{
+                            height: "60px",
+							display: "flex",
+							alignItems: "center",
+                        }}
+                    >
+                        {saveStatus === "unsaved" && <span>未保存</span>}
+                        {saveStatus === "saving" && <span>保存中...</span>}
+                        {saveStatus === "saved" && <span>保存済み</span>}
+                        {saveStatus === "hidden" && <span></span>}
+					</div>
+                    <BlockNoteView editor={editor} onChange={handleEditorChange} theme={theme} />
                 </>
             )}
         </Container>
